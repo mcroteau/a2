@@ -1,0 +1,38 @@
+{{layout:default.html}}
+{{title:Todos}}
+
+<h1>Todos</h1>
+
+{{#message}}
+    <p style="border:solid 1px #000;">{{message}}</p>
+{{/message}}
+
+
+{{#todosExist}}
+    <p><a href="/todos/create">New Todo &#x276F;</a></p>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Todo</th>
+            <th></th>
+        </tr>
+        {{#todos}}
+            <tr>
+                <td>{{id}}</td>
+                <td><a href="/todos/edit/{{id}}">{{todo}}</a>
+                    {{#finished}}&check;{{/finished}}
+                </td>
+                <td>
+                    <form action="/todos/delete/{{id}}" method="post">
+                        <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete?');"/>
+                    </form>
+                </td>
+            </tr>
+        {{/todos}}
+    </table>
+{{/todosExist}}
+{{^todosExist}}
+    <p>No todos created yet. <a href="${pageContext.request.contextPath}/todos/create">Create Todo</a></p>
+{{/todosExist}}
+
+

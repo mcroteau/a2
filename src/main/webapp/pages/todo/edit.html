@@ -1,0 +1,25 @@
+{{layout:default.html}}
+{{title:Edit Todo}}
+
+<h1>Edit Todo</h1>
+
+<p>
+    <a href="/todos">Todo List</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="/todos/create">New Todo &#x276F;</a>
+</p>
+
+
+<form action="/todos/update/{{#t}}{{id}}{{/t}}" method="post">
+    <label>Todo</label>
+    <input type="text" name="todo" value="{{#t}}{{todo}}{{/t}}"/>
+
+
+    <label>Finished</label>
+    <input type="checkbox" name="finished" id="finished" {{#t}}{{#finished}}checked{{/finished}}{{/t}}/>
+
+    <br/>
+
+    <input type="submit" value="Update Todo"/>
+</form>
+
+</body>
+</html>

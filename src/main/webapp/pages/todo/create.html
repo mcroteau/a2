@@ -1,0 +1,13 @@
+{{layout:default.html}}
+{{title:New Todo}}
+
+<h1>New Todo</h1>
+
+<p><a href="/todos">&#x276E; Back to List</a></p>
+
+<form action="/todos/save" method="post">
+    <label>Todo</label>
+    <input type="text" name="todo" value=""/>
+    <input type="submit" value="Save Todo"/>
+</form>
+
