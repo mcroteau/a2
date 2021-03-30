@@ -1,8 +1,10 @@
 package n.http;
 
 
-import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
+
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -43,12 +45,6 @@ public class DispatchHandler implements HttpHandler {
 
     public void setWebResources(String[] webResources){ this.webResources = webResources; }
 
-    //Headers h = exchange.getResponseHeaders();
-    //h.add("Location", "/o/hi");
-    //exchange.sendResponseHeaders(302, -1);
-    //exchange.close();
-    //return;
-
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
@@ -76,8 +72,6 @@ public class DispatchHandler implements HttpHandler {
 
                 Method method = httpMapping.getMethod();
                 Object obj = httpMapping.getClassDetails().getObject();
-                System.out.println("method::" + method.getName() + " : " + obj.getClass().getTypeName());
-
                 String response = (String) method.invoke(obj, good.toArray());
 
                 System.out.println("uri " + response);
@@ -109,15 +103,12 @@ public class DispatchHandler implements HttpHandler {
                     Writer out = new StringWriter();
                     out.append(raw);
 
-                    Template template = Mustache.compiler().compile(raw);
-                    String html = template.execute(exchangeData);
+                    MustacheFactory mf = new DefaultMustacheFactory();
+                    Mustache mustache = mf.compile(new StringReader(out.toString()), "Template issue:");
+                    mustache.execute(out, exchangeData).flush();
 
-    //                MustacheFactory mf = new DefaultMustacheFactory();
-    //                Mustache mustache = mf.compile(new StringReader(out.toString()), "Template issue:");
-    //                mustache.execute(out, exchangeData).flush();
-
-                    exchange.sendResponseHeaders(200, html.length());
-                    outputStream.write(html.getBytes());
+                    exchange.sendResponseHeaders(200, out.toString().length());
+                    outputStream.write(out.toString().getBytes());
                 }
 
                 outputStream.flush();
