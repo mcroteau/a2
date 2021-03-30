@@ -100,11 +100,13 @@ public class DispatchHandler implements HttpHandler {
 
                     String raw = layoutProcessor.render(viewFile);
 
+                    Writer in = new StringWriter();
+                    in.append(raw);
+
                     Writer out = new StringWriter();
-                    out.append(raw);
 
                     MustacheFactory mf = new DefaultMustacheFactory();
-                    Mustache mustache = mf.compile(new StringReader(out.toString()), "Template issue:");
+                    Mustache mustache = mf.compile(new StringReader(in.toString()), "Template issue:");
                     mustache.execute(out, exchangeData).flush();
 
                     exchange.sendResponseHeaders(200, out.toString().length());
